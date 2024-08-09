@@ -41,8 +41,8 @@ class AuthControllerTest extends TestCase
             'name' => 'Test New User',
             'email' => 'testnewuser@example.com',
             'document' => '09852366547',
-            'password' => 'avd1Word$',
-            'password_confirmation' => 'avd1Word$',
+            'password' => $this->passwordUser,
+            'password_confirmation' => $this->passwordUser,
         ];
 
         $response = $this->postJson('/api/register', $userData);

@@ -72,6 +72,7 @@ class AuthController extends Controller
       $request->validated(),
       [
         'password' => Hash::make($request->password),
+        'active' => 1,
       ]
     ));
 

@@ -93,6 +93,14 @@ Your application should now be running on http://localhost:8000.
 
 This project uses Swagger Lume for API documentation. You can access the API documentation at http://localhost:8000/api/documentation.
 
+## Endpoints Postman
+
+download the json with the endpoints to import into postman
+
+```plaintext
+postman_collection.json
+```
+
 ## Troubleshooting
 
 For any issues, refer to the Laravel documentation or the project's issue tracker on GitHub.

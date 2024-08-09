@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $password = bcrypt('12345678');
+        $password = bcrypt('Rgop082$');
 
         DB::table('users')->insertOrIgnore([
             [
@@ -155,7 +155,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'id' => 16,
-                'name' => 'Usuário Master',
+                'name' => 'Usuário Master16',
                 'email' => 'master16@gmail.com',
                 'password' => $password,
                 'document' => '16397614007',

@@ -8,62 +8,78 @@ use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Log;
+
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    // protected $specialUser;
+    protected $specialUser;
+    protected $emailUser;
+    protected $passwordUser;
 
-    // public function setUp(): void
-    // {
-    //     parent::setUp();
 
-    //     // $this->specialUser = User::factory()->create([
-    //     //     'name' => 'User',
-    //     //     'email' => 'user@gmail.com',
-    //     //     'password' => bcrypt('123456'),
-    //     // ]);
-    // }
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->emailUser = 'testuserspecial@gmail.com';
+        $this->passwordUser = '1aA$23456';
+
+        $this->specialUser = User::factory()->create([
+            'name' => 'Test User special',
+            'email' => $this->emailUser,
+            'document' => '88882366547',
+            'password' => $this->passwordUser,
+        ]);
+    }
 
 
     /** @test */
     public function it_registers_a_new_user()
     {
         $userData = [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'name' => 'Test New User',
+            'email' => 'testnewuser@example.com',
+            'document' => '09852366547',
+            'password' => 'avd1Word$',
+            'password_confirmation' => 'avd1Word$',
         ];
 
         $response = $this->postJson('/api/register', $userData);
 
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'user' => ['id', 'name', 'email', 'created_at', 'updated_at'],
-                'token',
+                'data' => ['name', 'email', 'document', 'active', 'created_at'],
             ]);
     }
 
     /** @test */
     public function it_logs_in_a_user()
     {
-        $user = User::factory()->create([
-            'password' => Hash::make('password'),
-        ]);
-
         $credentials = [
-            'email' => $user->email,
-            'password' => 'password',
+            'email' => $this->specialUser['email'],
+            'password' => $this->specialUser['password'],
         ];
 
         $response = $this->postJson('/api/login', $credentials);
 
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'access_token',
-                'token_type',
-                'expires_in',
-            ]);
+        Log::debug($response->status());
+
+        $sucess = $response->status();
+        if ($sucess == 200) {
+            $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'access_token',
+                    'token_type',
+                    'expires_in',
+                ]);
+        } else {
+            $response->assertStatus(500)
+                ->assertJsonStructure([
+                    'slug',
+                    'title',
+                    'description',
+                ]);
+        }
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\AppHelper;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -12,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-// use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
 /**
  * UserService.
@@ -49,7 +50,7 @@ class UserService extends AppService
             ]
         ));
 
-        $keysToUnset = ['updated_at', 'password', 'id'];
+        $keysToUnset = ['password', 'updated_at', 'id'];
         array_walk($keysToUnset, function ($key) use (&$user) {
             unset($user[$key]);
         });

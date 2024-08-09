@@ -84,8 +84,8 @@ class UserRepositoryEloquent implements UserRepository
         $result = $this->model->newQuery()->paginate($limit);
         //$result = $this->model->newQuery()->get();
 
-        LOG::debug('teste');
-        LOG::debug($result);
+        // LOG::debug('teste');
+        // LOG::debug($result);
         //LOG::debug($this->parserResult($result));
 
         $transformedData = $this->presenter->presentCollection($result);

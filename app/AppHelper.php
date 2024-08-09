@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use Illuminate\Support\Facades\Log;
+
 /**
  * Class Helper.
  */

@@ -6,11 +6,18 @@ namespace App\Http\Controllers;
 
 use App\Services\UserService;
 use App\Http\Resources\AuthResource;
-use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Auth\RegisterRequest;
+
 
 /**
- * Class UserController.
+ * @OA\Tag(
+ *     name="User",
+ *     description="Endpoints for managing users"
+ * )
  */
+
+
+
 class UserController extends Controller
 {
     protected $service;
@@ -39,8 +46,53 @@ class UserController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function index(): JsonResponse
+    public function index(): AuthResource //JsonResponse
     {
         return $this->service->index();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/me",
+     *     summary="Get the authenticated user",
+     *     tags={"Authentication"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Authenticated user data",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function me(): AuthResource
+    {
+        return $this->service->me();
+    }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/register",
+     *     summary="Register a new user",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User registration data",
+     *         @OA\JsonContent(ref="#/components/schemas/RegisterRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User registered successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request"
+     *     )
+     * )
+     */
+    public function register(RegisterRequest $request): AuthResource
+    {
+        return $this->service->store($request);
     }
 }

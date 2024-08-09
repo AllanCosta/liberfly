@@ -6,6 +6,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Http\JsonResponse;
+use App\Exceptions\CustomExceptionInterface;
 
 /**
  * @OA\Info(
@@ -25,4 +27,35 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * @param array $body
+     *
+     * @return JsonResponse
+     */
+    protected function successResponse(array $body = []): JsonResponse
+    {
+        return response()->json($body);
+    }
+
+    protected function undefinedErrorResponse(\Exception $e): JsonResponse
+    {
+        $statusCode = 500;
+        $data = [
+            'slug' => 'internal_error',
+            'title' => 'Ops!',
+            'description' => $e->getMessage(),
+        ];
+
+        if ($e instanceof CustomExceptionInterface) {
+            $data = [
+                'slug' => $e->getSlug(),
+                'title' => $e->getTitle(),
+                'description' => $e->getDescription(),
+            ];
+            $statusCode = $e->getStatusCode();
+        }
+
+        return response()->json($data, $statusCode);
+    }
 }

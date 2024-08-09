@@ -8,16 +8,19 @@ use App\Repositories\PasswordResetRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\Contracts\RepositoryInterface;
+use Illuminate\Http\JsonResponse;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 class AuthService extends AppService
 {
     private const TOKEN_TYPE = 'bearer';
 
-    protected $repository;
+    protected $jwt;
 
-    public function __construct(RepositoryInterface $repository)
+    public function __construct(JWTAuth $jwt)
     {
-        $this->repository = $repository;
+        $this->jwt = $jwt;
     }
 
     /**
@@ -27,37 +30,33 @@ class AuthService extends AppService
      *
      * @throws \Exception
      */
-    public function login(array $data): array
+    public function login(array $data): JsonResponse
     {
         $credentials = [
             'email' => $data['email'],
             'password' => $data['password']
         ];
 
-        $token = auth('api')->attempt($credentials);
+        $token = Auth::attempt($credentials);
 
         if (empty($token)) {
             throw new \Exception('Unauthorized', 401);
         }
 
-        return $this->getResponseToken(
-            $token
-        );
+        return $this->getResponseToken($token);
     }
 
     public function logout(): void
     {
-        auth('api')->logout();
+        Auth::guard('api')->logout();
     }
 
-
-    private function getResponseToken($token): array
+    protected function getResponseToken($token): JsonResponse
     {
-        return [
-            'data' => [
-                'access_token' => $token,
-                'token_type' => self::TOKEN_TYPE
-            ]
-        ];
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => self::TOKEN_TYPE,
+            'expires_in' => $this->jwt::factory()->getTTL() * 60
+        ]);
     }
 }

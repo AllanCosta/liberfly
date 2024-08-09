@@ -12,6 +12,7 @@ use Illuminate\Validation\Rules\Password;
  *     required={"name", "email", "password", "password_confirmation"},
  *     @OA\Property(property="name", type="string", example="John Doe", description="Name of the user", minLength=2, maxLength=255),
  *     @OA\Property(property="email", type="string", format="email", example="john.doe@example.com", description="Email of the user", maxLength=255),
+ *     @OA\Property(property="document", type="string", example="06852444598", description="Document of the user", maxLength=11),
  *     @OA\Property(property="password", type="string", format="password", example="P@ssw0rd", description="Password for the user", minLength=6),
  *     @OA\Property(property="password_confirmation", type="string", format="password", example="P@ssw0rd", description="Password confirmation")
  * )
@@ -38,7 +39,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|between:2,255',
             'email' => 'required|string|email|max:255|unique:users',
-            'document' => 'required|string',
+            'document' => 'required|string|max:11|unique:users',
             'password' => [
                 'required',
                 'confirmed',
@@ -62,6 +63,7 @@ class RegisterRequest extends FormRequest
         return [
             'name'                  => 'name',
             'email'                 => 'email',
+            'document'              => 'document',
             'password'              => 'password',
         ];
     }

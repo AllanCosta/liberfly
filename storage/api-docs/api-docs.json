@@ -15,41 +15,6 @@
         }
     ],
     "paths": {
-        "/api/register": {
-            "post": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Register a new user",
-                "operationId": "8a56853624e025573120a09a4c75d468",
-                "requestBody": {
-                    "description": "User registration data",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RegisterRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "User registered successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/User"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    }
-                }
-            }
-        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -131,32 +96,6 @@
                 ]
             }
         },
-        "/api/me": {
-            "get": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Get the authenticated user",
-                "operationId": "9d9bc556f927575aa492a88c28fe5908",
-                "responses": {
-                    "200": {
-                        "description": "Authenticated user data",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/User"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -184,6 +123,67 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/me": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get the authenticated user",
+                "operationId": "aef6fdddec1e8495d4830821b4afdf54",
+                "responses": {
+                    "200": {
+                        "description": "Authenticated user data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register a new user",
+                "operationId": "2f25885f3b6f61ca11724ec302d2e439",
+                "requestBody": {
+                    "description": "User registration data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
             }
         }
     },
@@ -248,6 +248,12 @@
                         "format": "email",
                         "maxLength": 255,
                         "example": "john.doe@example.com"
+                    },
+                    "document": {
+                        "description": "Document of the user",
+                        "type": "string",
+                        "maxLength": 11,
+                        "example": "06852444598"
                     },
                     "password": {
                         "description": "Password for the user",

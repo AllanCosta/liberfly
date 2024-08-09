@@ -18,12 +18,6 @@ interface RepositoryInterface
 
   public function delete(int $id);
 
-  public function findByUuid(string $uuid);
-
-  public function updateByUuid(array $data, string $uuid);
-
-  public function deleteByUuid(string $uuid);
-
   public function paginate(int $limit);
 
   public function skipPresenter();

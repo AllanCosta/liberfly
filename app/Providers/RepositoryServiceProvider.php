@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-// use App\Repositories\XXXXRepository;
-// use App\Repositories\XXXXRepositoryEloquent;
+use App\Repositories\UserRepository;
+use App\Repositories\UserRepositoryEloquent;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -20,6 +20,6 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->app->bind(XXXXRepository::class, XXXXRepositoryEloquent::class);
+        $this->app->bind(UserRepository::class, UserRepositoryEloquent::class);
     }
 }

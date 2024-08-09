@@ -43,28 +43,7 @@ class AuthController extends Controller
     $this->jwt = $jwt;
   }
 
-  /**
-   * @OA\Get(
-   *     path="/api/users",
-   *     summary="List all users",
-   *     tags={"Authentication"},
-   *     @OA\Response(
-   *         response=200,
-   *         description="Successful operation",
-   *         @OA\JsonContent(
-   *             type="array",
-   *             @OA\Items(ref="#/components/schemas/User")
-   *         )
-   *     ),
-   *     security={{"bearerAuth":{}}}
-   * )
-   */
-  public function index(): AuthResource
-  {
-    return new AuthResource(
-      User::all()
-    );
-  }
+
 
   /**
    * @OA\Post(

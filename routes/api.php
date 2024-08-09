@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth.jwt')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('me', [AuthController::class, 'me']);
-    Route::get('users', [AuthController::class, 'index']);
+    Route::get('users', [UserController::class, 'index']);
 });
 
 

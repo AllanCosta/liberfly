@@ -122,25 +122,6 @@ class BaseRepository implements RepositoryInterface
     return $this->parserResult($result);
   }
 
-  public function findByUuid(string $uuid)
-  {
-    $result = $this->model->where('uuid', $uuid)->firstOrFail();
-    return $this->applyPresenter($result);
-  }
-
-  public function updateByUuid(array $data, string $uuid)
-  {
-    $record = $this->model->where('uuid', $uuid)->firstOrFail();
-    $record->update($data);
-    return $this->applyPresenter($record);
-  }
-
-  public function deleteByUuid(string $uuid): bool
-  {
-    $record = $this->model->where('uuid', $uuid)->firstOrFail();
-    return $record->delete();
-  }
-
 
   /**
    * Aplica o presenter se não estiver configurado para ser ignorado.

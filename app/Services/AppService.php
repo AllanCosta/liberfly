@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Repository;
 
 /**
  * Class AppService.
@@ -13,7 +13,7 @@ class AppService
 {
     protected $repository;
 
-    public function __construct(RepositoryInterface $repository)
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }

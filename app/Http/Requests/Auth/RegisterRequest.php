@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Rules\ValidCpf;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
@@ -39,7 +40,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|between:2,255',
             'email' => 'required|string|email|max:255|unique:users',
-            'document' => 'required|string|max:11|unique:users',
+            'document' => ['required', 'string', 'unique:users', new ValidCpf],
             'password' => [
                 'required',
                 'confirmed',
@@ -50,6 +51,7 @@ class RegisterRequest extends FormRequest
                     ->symbols()
                     ->uncompromised()
             ],
+            'active' => 'sometimes|boolean',
         ];
     }
 
@@ -65,6 +67,7 @@ class RegisterRequest extends FormRequest
             'email'                 => 'email',
             'document'              => 'document',
             'password'              => 'password',
+            'active'                => 'active',
         ];
     }
 }

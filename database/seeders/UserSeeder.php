@@ -93,18 +93,18 @@ class UserSeeder extends Seeder
             [
                 'id' => 9,
                 'name' => 'Usuário Master9',
-                'email' => 'master@gmail.com',
+                'email' => 'master9@gmail.com',
                 'password' => $password,
-                'document' => '93397614007',
+                'document' => '93557614007',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
                 'id' => 10,
                 'name' => 'Usuário Master10',
-                'email' => 'master@gmail.com',
+                'email' => 'master10@gmail.com',
                 'password' => $password,
-                'document' => '10397614007',
+                'document' => '10397664007',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],

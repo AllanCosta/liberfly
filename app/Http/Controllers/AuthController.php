@@ -69,11 +69,7 @@ class AuthController extends Controller
    */
   public function login(LoginRequest $request): JsonResponse
   {
-    try {
-      return $this->service->login($request->validated());
-    } catch (\Exception $exception) {
-      return $this->undefinedErrorResponse($exception);
-    }
+    return $this->service->login($request->validated());
   }
 
   /**
@@ -94,14 +90,9 @@ class AuthController extends Controller
    */
   public function logout(): JsonResponse
   {
-    try {
-      $this->service->logout();
-
-      return $this->successResponse([
-        'message' => 'Successfully logged out'
-      ]);
-    } catch (\Exception $exception) {
-      return $this->undefinedErrorResponse($exception);
-    }
+    $this->service->logout();
+    return $this->successResponse([
+      'message' => 'Successfully logged out'
+    ]);
   }
 }

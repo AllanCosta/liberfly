@@ -6,8 +6,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Presenters\UserPresenter;
-use App\Http\Resources\AuthResource;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 use Illuminate\Support\Facades\Log;
 
@@ -46,11 +45,6 @@ class UserRepositoryEloquent implements UserRepository
     }
 
 
-    public function paginate(int $limit = 15): LengthAwarePaginator
-    {
-        return $this->model->paginate($limit);
-    }
-
     /**
      * Define se o presenter deve ser ignorado.
      *
@@ -79,19 +73,26 @@ class UserRepositoryEloquent implements UserRepository
      * @param int $limit
      * @return mixed
      */
-    public function all(int $limit = 15): LengthAwarePaginator
+    public function all(): Collection
     {
-        $result = $this->model->newQuery()->paginate($limit);
-        //$result = $this->model->newQuery()->get();
-
-        // LOG::debug('teste');
-        // LOG::debug($result);
-        //LOG::debug($this->parserResult($result));
-
+        $result = $this->model->newQuery()->get();
         $transformedData = $this->presenter->presentCollection($result);
-
-        return $transformedData;
+        return $this->parserResult($transformedData);
     }
+
+    /**
+     * Criar um novo registro.
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function create(array $data)
+    {
+        $result = $this->model->create($data);
+        return $this->parserResult($result);
+    }
+
+
 
 
 
@@ -115,17 +116,6 @@ class UserRepositoryEloquent implements UserRepository
         return $this->parserResult($result);
     }
 
-    /**
-     * Criar um novo registro.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function create(array $data)
-    {
-        $result = $this->model->create($data);
-        return $this->parserResult($result);
-    }
 
     /**
      * Encontrar um registro por ID.
@@ -166,6 +156,10 @@ class UserRepositoryEloquent implements UserRepository
         $result = $model ? $model->delete() : false;
         return $this->parserResult($result);
     }
+
+
+
+
 
 
     /**

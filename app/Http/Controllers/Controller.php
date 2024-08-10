@@ -37,25 +37,4 @@ class Controller extends BaseController
     {
         return response()->json($body);
     }
-
-    protected function undefinedErrorResponse(\Exception $e): JsonResponse
-    {
-        $statusCode = 500;
-        $data = [
-            'slug' => 'internal_error',
-            'title' => 'Ops!',
-            'description' => $e->getMessage(),
-        ];
-
-        if ($e instanceof CustomExceptionInterface) {
-            $data = [
-                'slug' => $e->getSlug(),
-                'title' => $e->getTitle(),
-                'description' => $e->getDescription(),
-            ];
-            $statusCode = $e->getStatusCode();
-        }
-
-        return response()->json($data, $statusCode);
-    }
 }

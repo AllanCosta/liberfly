@@ -6,7 +6,7 @@ namespace App\Repositories\Contracts;
 
 interface RepositoryInterface
 {
-  public function all(int $limit = 15);
+  public function all();
 
   public function allWithoutPagination();
 
@@ -17,8 +17,6 @@ interface RepositoryInterface
   public function update(array $data, int $id);
 
   public function delete(int $id);
-
-  public function paginate(int $limit);
 
   public function skipPresenter();
 }

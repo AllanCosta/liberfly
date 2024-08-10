@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Presenters;
 
 use Illuminate\Support\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use App\Presenters\Traits\PresentTrait;
 
 use Illuminate\Support\Facades\Log;
@@ -17,18 +16,17 @@ class UserPresenter
     /**
      * Transforma uma coleção de dados paginados.
      *
-     * @param LengthAwarePaginator $data
-     * @return LengthAwarePaginator
+     * @param Collection $data
+     * @return Collection
      */
-    public function presentCollection(LengthAwarePaginator $data): LengthAwarePaginator
+    public function presentCollection(Collection $data): Collection
     {
         // Transforme os itens da coleção
-        $transformedItems = $data->getCollection()->map(function ($item) {
+        $transformedItems = $data->map(function ($item) {
             return $this->transformItem($item);
         });
 
-        // Crie uma nova instância de LengthAwarePaginator com os itens transformados
-        return $data->setCollection($transformedItems);
+        return $transformedItems;
     }
 
     /**
@@ -44,8 +42,9 @@ class UserPresenter
             'name' => $item->name,
             'document' => $this->maskDocument($item->document),
             'email' => $item->email,
-            'registered_at' => $this->formatDate((string) $item->created_at),
-            'is_active' => $this->booleanToText($item->active),
+            'created_at' => $this->formatDate((string) $item->created_at),
+            'updated_at' => $this->formatDate((string) $item->updated_at),
+            'active' => $this->booleanToText($item->active),
         ];
     }
 }

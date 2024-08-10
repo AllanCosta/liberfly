@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Repositories\PasswordResetRepository;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use App\Repositories\Contracts\RepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\CustomException;
+
+use Illuminate\Support\Facades\Log;
 
 class AuthService extends AppService
 {
@@ -30,21 +29,19 @@ class AuthService extends AppService
      *
      * @throws \Exception
      */
-    public function login(array $data): JsonResponse
+    public function login(array $credentials): JsonResponse
     {
-        $credentials = [
-            'email' => $data['email'],
-            'password' => $data['password']
-        ];
-
-        $token = Auth::attempt($credentials);
-
-        if (empty($token)) {
-            throw new \Exception('Unauthorized', 401);
+        try {
+            $token = Auth::attempt($credentials);
+            if (empty($token)) {
+                throw new \Exception('Unauthorized', 401);
+            }
+            return $this->getResponseToken($token);
+        } catch (\Exception $e) {
+            throw new CustomException($e, $e->getCode());
         }
-
-        return $this->getResponseToken($token);
     }
+
 
     public function logout(): void
     {

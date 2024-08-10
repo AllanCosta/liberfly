@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Resources\AuthResource;
+use App\Http\Resources\AuthResourceCollection;
 use App\Http\Requests\Auth\RegisterRequest;
-
+use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Tag(
@@ -46,9 +48,13 @@ class UserController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function index(): AuthResource //JsonResponse
+    public function index(Request $request): AuthResourceCollection //JsonResponse
     {
-        return $this->service->index();
+        return $this->service->index($request);
+
+        // return new AuthResource(
+        //     $this->service->index()
+        // );
     }
 
     /**
@@ -66,7 +72,9 @@ class UserController extends Controller
      */
     public function me(): AuthResource
     {
-        return $this->service->me();
+        return new AuthResource(
+            $this->service->me()
+        );
     }
 
 
@@ -93,6 +101,8 @@ class UserController extends Controller
      */
     public function register(RegisterRequest $request): AuthResource
     {
-        return $this->service->store($request);
+        return new AuthResource(
+            $this->service->store($request->validated())
+        );
     }
 }

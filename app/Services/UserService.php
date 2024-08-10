@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\AppHelper;
-use App\Models\User;
-use App\Repositories\UserRepository;
-use App\Http\Requests\Auth\RegisterRequest;
+use Illuminate\Http\Request;
+use App\Repositories\UserRepositoryEloquent;
 use App\Http\Resources\AuthResource;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\AuthResourceCollection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Exceptions\CustomException;
+use App\Helpers\PaginationHelper;
 
 use Illuminate\Support\Facades\Log;
 
@@ -22,39 +21,44 @@ class UserService extends AppService
 {
     protected $repository;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepositoryEloquent $repository)
     {
         $this->repository = $repository;
     }
 
-    public function index(): AuthResource //JsonResponse
+    public function index(Request $request): AuthResourceCollection
     {
-        return new AuthResource(
-            //return response()->json(
-            $this->repository->all()
-        );
+        try {
+            return new AuthResourceCollection(
+                PaginationHelper::paginate(
+                    $this->repository->all(),
+                    $request
+                )
+            );
+        } catch (\Exception $e) {
+            throw new CustomException($e);
+        }
     }
 
     public function me(): AuthResource
     {
-        return new AuthResource(Auth::guard('api')->user());
+        try {
+            return new AuthResource(
+                Auth::guard('api')->user()
+            );
+        } catch (\Exception $e) {
+            throw new CustomException($e);
+        }
     }
 
-    public function store(RegisterRequest $request): AuthResource
+    public function store(array $data): AuthResource
     {
-        $user = User::create(array_merge(
-            $request->validated(),
-            [
-                'password' => Hash::make($request->password),
-                'active' => 1,
-            ]
-        ));
-
-        $keysToUnset = ['password', 'updated_at', 'id'];
-        array_walk($keysToUnset, function ($key) use (&$user) {
-            unset($user[$key]);
-        });
-
-        return new AuthResource($user);
+        try {
+            return new AuthResource(
+                $this->repository->create($data)
+            );
+        } catch (\Exception $e) {
+            throw new CustomException($e);
+        }
     }
 }
